@@ -23,6 +23,14 @@ public class Restaurant {
         this.type = type;
     }
 
+    public Restaurant(int id, String name, String description, String website, String street) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.website = website;
+        // TODO : this.address = new Localisation(street);
+    }
+
     public String getName() {
         return name;
     }

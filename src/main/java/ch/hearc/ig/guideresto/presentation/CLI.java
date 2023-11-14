@@ -12,6 +12,8 @@ import ch.hearc.ig.guideresto.business.Grade;
 import ch.hearc.ig.guideresto.business.Restaurant;
 import ch.hearc.ig.guideresto.business.RestaurantType;
 import ch.hearc.ig.guideresto.persistence.FakeItems;
+import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
+
 import java.io.PrintStream;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -26,12 +28,14 @@ public class CLI {
   private final Scanner scanner;
   private final PrintStream printStream;
   private final FakeItems fakeItems;
+  private final RestaurantService restaurantService;
 
   // Injection de dépendances
-  public CLI(Scanner scanner, PrintStream printStream, FakeItems fakeItems) {
+  public CLI(Scanner scanner, PrintStream printStream, FakeItems fakeItems, RestaurantService restaurantService) {
     this.scanner = scanner;
     this.printStream = printStream;
     this.fakeItems = fakeItems;
+    this.restaurantService = restaurantService;
   }
 
   public void start() {
@@ -103,7 +107,8 @@ public class CLI {
   private void showRestaurantsList() {
     println("Liste des restaurants : ");
 
-    Set<Restaurant> restaurants = fakeItems.getAllRestaurants();
+    // TODO : Set<Restaurant> restaurants = fakeItems.getAllRestaurants();
+    Set<Restaurant> restaurants = restaurantService.getAll();
 
     Optional<Restaurant> maybeRestaurant = pickRestaurant(restaurants);
     // Si l'utilisateur a choisi un restaurant, on l'affiche, sinon on ne fait rien et l'application va réafficher le menu principal
