@@ -119,10 +119,12 @@ public class CLI {
     println("Veuillez entrer une partie du nom recherché : ");
     String research = readString();
 
-    Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
-        .stream()
-        .filter(r -> r.getName().equalsIgnoreCase(research))
-        .collect(toUnmodifiableSet());
+
+    // TODO : Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
+    //    .stream()
+    //    .filter(r -> r.getName().equalsIgnoreCase(research))
+    //    .collect(toUnmodifiableSet());
+    Set<Restaurant> restaurants = restaurantService.searchByName(research);
 
     Optional<Restaurant> maybeRestaurant = pickRestaurant(restaurants);
     maybeRestaurant.ifPresent(this::showRestaurant);
@@ -136,10 +138,11 @@ public class CLI {
     println("Veuillez entrer une partie du nom de la ville désirée : ");
     String research = readString();
 
-    Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
-        .stream()
-        .filter(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(research.toUpperCase()))
-        .collect(toUnmodifiableSet());
+//    Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
+//        .stream()
+//        .filter(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(research.toUpperCase()))
+//        .collect(toUnmodifiableSet());
+    var restaurants = restaurantService.searchByName(research);
 
     Optional<Restaurant> maybeRestaurant = pickRestaurant(restaurants);
     maybeRestaurant.ifPresent(this::showRestaurant);
