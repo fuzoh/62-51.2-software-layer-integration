@@ -1,7 +1,6 @@
 package ch.hearc.ig.guideresto.persistence.services;
 
 import ch.hearc.ig.guideresto.business.EvaluationCriteria;
-import ch.hearc.ig.guideresto.business.Restaurant;
 import ch.hearc.ig.guideresto.persistence.cache.Cache;
 import ch.hearc.ig.guideresto.persistence.mappers.EvaluationCriteriaMapper;
 

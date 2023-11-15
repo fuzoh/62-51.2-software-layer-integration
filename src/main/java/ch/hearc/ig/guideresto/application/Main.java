@@ -1,6 +1,5 @@
 package ch.hearc.ig.guideresto.application;
 
-import ch.hearc.ig.guideresto.business.City;
 import ch.hearc.ig.guideresto.persistence.FakeItems;
 import ch.hearc.ig.guideresto.persistence.mappers.CityMapper;
 import ch.hearc.ig.guideresto.persistence.mappers.EvaluationCriteriaMapper;

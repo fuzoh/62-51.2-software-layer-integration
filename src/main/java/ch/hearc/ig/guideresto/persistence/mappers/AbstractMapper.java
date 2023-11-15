@@ -25,7 +25,6 @@ public abstract class AbstractMapper<T> implements Mapper<T> {
     }
 
     protected Set<T> mapAll(ResultSet rs) throws SQLException {
-        System.out.println("Hello");
         var allData = new HashSet<T>();
         Optional<T> data;
         while ((data = map(rs)).isPresent()) {

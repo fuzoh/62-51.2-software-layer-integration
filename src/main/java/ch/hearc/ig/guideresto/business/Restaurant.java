@@ -86,6 +86,10 @@ public class Restaurant implements CacheAble {
         return evaluations;
     }
 
+    public void setEvaluations(Set<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
+
     public Localisation getAddress() {
         return address;
     }
