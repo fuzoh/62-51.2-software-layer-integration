@@ -10,11 +10,11 @@ public class RestaurantService {
 
     private final RestaurantMapper restaurantMapper;
 
-    private Cache<Restaurant> cache;
+    private final Cache<Restaurant> cache;
 
     public RestaurantService(RestaurantMapper restaurantMapper) {
         this.restaurantMapper = restaurantMapper;
-        this.cache = new Cache<>();
+        this.cache = Cache.getCacheInstance(Restaurant.class);
     }
 
     public Set<Restaurant> getAll() {
@@ -38,5 +38,9 @@ public class RestaurantService {
             cache.populate(restaurantMapper.getAll());
         }
         return cache.getMatches(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(needle.toUpperCase()));
+    }
+
+    public void add(Restaurant restaurant) {
+        // TODO : transaction and add restaurant to database !!!
     }
 }

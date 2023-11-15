@@ -55,7 +55,7 @@ public class CityMapper extends AbstractMapper<City> {
     @Override
     public City insert(City entity) {
         try (var query = DatabaseProvider
-                .preparedQueryOf("insert into VILLES (CODE_POSTAL, NOM_VILLE) VALUES (?, ?)")
+                .preparedQueryOf("insert into VILLES (NUMERO, CODE_POSTAL, NOM_VILLE) VALUES (null, ?, ?)")
         ) {
             query.bind(entity.getZipCode()).bind(entity.getCityName()).execute();
             return entity;

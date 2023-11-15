@@ -1,12 +1,21 @@
 package ch.hearc.ig.guideresto.persistence.mappers;
 
-import ch.hearc.ig.guideresto.business.City;
+import ch.hearc.ig.guideresto.persistence.cache.Cache;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public abstract class AbstractMapper<T> implements Mapper<T> {
+
+    /**
+     * This method needs to be implemented for each mapper
+     * The method is responsible to extract data from result set and create the
+     * mapper corresponding data class
+     */
+    protected abstract T mapToObj(ResultSet rs) throws SQLException;
 
     protected Optional<T> map(ResultSet rs) throws SQLException {
         if (rs.next()) {
@@ -14,8 +23,6 @@ public abstract class AbstractMapper<T> implements Mapper<T> {
         }
         return Optional.empty();
     }
-
-    protected abstract T mapToObj(ResultSet rs) throws SQLException;
 
     protected Set<T> mapAll(ResultSet rs) throws SQLException {
         System.out.println("Hello");
@@ -27,10 +34,11 @@ public abstract class AbstractMapper<T> implements Mapper<T> {
         return allData;
     }
 
-    protected  <E> E getToOneRelation(Mapper<E> mapper, int value) throws SQLException {
-       return mapper.find(value).orElseThrow();
+    protected <E> E getToOneRelation(Mapper<E> mapper, int value) throws SQLException {
+        return mapper.find(value).orElseThrow();
     }
+
     protected <E> Set<E> getToManyRelation(Mapper<E> mapper, String field, String value) throws SQLException {
-       return mapper.getWhere(field, value);
+        return mapper.getWhere(field, value);
     }
 }

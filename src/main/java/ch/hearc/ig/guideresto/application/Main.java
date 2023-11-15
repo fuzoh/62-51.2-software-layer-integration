@@ -1,8 +1,12 @@
 package ch.hearc.ig.guideresto.application;
 
 import ch.hearc.ig.guideresto.persistence.FakeItems;
+import ch.hearc.ig.guideresto.persistence.mappers.CityMapper;
 import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
+import ch.hearc.ig.guideresto.persistence.mappers.RestaurantTypeMapper;
+import ch.hearc.ig.guideresto.persistence.services.CityService;
 import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
+import ch.hearc.ig.guideresto.persistence.services.RestaurantTypesService;
 import ch.hearc.ig.guideresto.presentation.CLI;
 
 import java.util.Scanner;
@@ -15,9 +19,17 @@ public class Main {
         var fakeItems = new FakeItems();
 
         var restaurantService = new RestaurantService(new RestaurantMapper());
+        var cityService = new CityService(new CityMapper());
+        var restaurantTypeService = new RestaurantTypesService(new RestaurantTypeMapper());
 
         var printStream = System.out;
-        var cli = new CLI(scanner, printStream, fakeItems, restaurantService);
+        var cli = new CLI(
+                scanner,
+                printStream,
+                fakeItems,
+                restaurantService,
+                cityService,
+                restaurantTypeService);
 
         cli.start();
     }

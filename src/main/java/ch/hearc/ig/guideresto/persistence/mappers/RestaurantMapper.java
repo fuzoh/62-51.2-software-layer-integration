@@ -19,6 +19,7 @@ public class RestaurantMapper extends AbstractMapper<Restaurant> {
                 rs.getString("SITE_WEB"),
                 rs.getString("ADRESSE"),
                 // Eager load relations, without inner join -> this will cause N+1 problem to appear
+                // TODO : mitigate this problem introducing cache in relations
                 getToOneRelation(new CityMapper(), rs.getInt("FK_VILL")),
                 getToOneRelation(new RestaurantTypeMapper(), rs.getInt("FK_TYPE"))
         );

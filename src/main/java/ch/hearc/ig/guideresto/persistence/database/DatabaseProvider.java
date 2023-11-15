@@ -21,7 +21,12 @@ public class DatabaseProvider {
         return new Query(conn(), query);
     }
 
-    public static void commit() throws SQLException {
-        conn().dbConn().commit();
+    public static void commit() {
+        try {
+            conn().dbConn().commit();
+        } catch (SQLException e) {
+            System.out.println("Failed to commit : " + e.getCause());
+            throw new RuntimeException(e);
+        }
     }
 }
