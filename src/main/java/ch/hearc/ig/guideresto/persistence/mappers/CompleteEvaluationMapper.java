@@ -38,9 +38,9 @@ public class CompleteEvaluationMapper extends AbstractMapper<CompleteEvaluation>
     public Set<CompleteEvaluation> getWhere(String column, String value) {
         try (var query = DatabaseProvider
                 .preparedQueryOf(
-                        "select NUMERO, DATE_EVAL, COMMENTAIRE, NOM_UTILISATEUR, FK_REST from COMMENTAIRE where ? = ?")
+                        "select NUMERO, DATE_EVAL, COMMENTAIRE, NOM_UTILISATEUR, FK_REST from COMMENTAIRES where " + column + "  = ?")
         ) {
-            return mapAll(query.bind(column).bind(value).execute());
+            return mapAll(query.bind(value).execute());
         } catch (Exception e) {
             throw new DatabaseMapperException("Error while executing mapper query findAll", e);
         }

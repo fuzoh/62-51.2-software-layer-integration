@@ -72,9 +72,9 @@ public class RestaurantMapper extends AbstractMapper<Restaurant> {
     public Set<Restaurant> getWhere(String column, String value) {
         try (var query = DatabaseProvider
                 .preparedQueryOf(
-                        "select NUMERO, NOM, DESCRIPTION, SITE_WEB, ADRESSE, FK_VILL, FK_TYPE from RESTAURANTS where ? = ?")
+                        "select NUMERO, NOM, DESCRIPTION, SITE_WEB, ADRESSE, FK_VILL, FK_TYPE from RESTAURANTS where " + column + " = ?")
         ) {
-            return mapAll(query.bind(column).bind(value).execute());
+            return mapAll(query.bind(value).execute());
         } catch (Exception e) {
             throw new DatabaseMapperException("Error while executing mapper query getWhere", e);
         }

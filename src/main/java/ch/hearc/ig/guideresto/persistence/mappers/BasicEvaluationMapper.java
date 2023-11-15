@@ -42,6 +42,17 @@ public class BasicEvaluationMapper extends AbstractMapper<BasicEvaluation> {
     public Set<BasicEvaluation> getWhere(String column, String value) {
         try (var query = DatabaseProvider
                 .preparedQueryOf(
+                        "select NUMERO, APPRECIATION, DATE_EVAL, ADRESSE_IP, FK_REST from LIKES where " + column + " = ?")
+        ) {
+            return mapAll(query.bind(value).execute());
+        } catch (Exception e) {
+            throw new DatabaseMapperException("Error while executing mapper query findAll", e);
+        }
+    }
+
+    public Set<BasicEvaluation> getWhere(String column, int value) {
+        try (var query = DatabaseProvider
+                .preparedQueryOf(
                         "select NUMERO, APPRECIATION, DATE_EVAL, ADRESSE_IP, FK_REST from LIKES where ? = ?")
         ) {
             return mapAll(query.bind(column).bind(value).execute());

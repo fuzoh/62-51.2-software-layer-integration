@@ -14,7 +14,7 @@ import java.util.Set;
 public class GradeMapper extends AbstractMapper<Grade> {
     @Override
     protected Grade mapToObj(ResultSet rs) throws SQLException {
-        var id = rs.getInt("NUMERO");
+        var id = rs.getInt("FK_CRIT");
         return new Grade(
                 id,
                 rs.getInt("NOTE"),
@@ -41,9 +41,9 @@ public class GradeMapper extends AbstractMapper<Grade> {
     public Set<Grade> getWhere(String column, String value) {
         try (var query = DatabaseProvider
                 .preparedQueryOf(
-                        "select NUMERO, NOTE, FK_COMM, FK_CRIT from COMMENTAIRE where ? = ?")
+                        "select NUMERO, NOTE, FK_COMM, FK_CRIT from NOTES where " + column + " = ?")
         ) {
-            return mapAll(query.bind(column).bind(value).execute());
+            return mapAll(query.bind(value).execute());
         } catch (Exception e) {
             throw new DatabaseMapperException("Error while executing mapper query findAll", e);
         }

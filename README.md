@@ -13,8 +13,8 @@ objets après leur création ?** : I use the returning keyword to get back the g
 - **Comment gérer les relations bidirectionnelles (Restaurant -> Evaluations, Evaluation -> Restaurant)** :
 This is a real problem, because if y reuse my mappers to load bidirectional relations, this will request
 a new time data that are already loaded in memory, and this will also create infinite recursion loop between mappers.
-In my app, i choose to remove the bidirectional relations, because we don't need it to retrieve the information, 
-I can simply filter the restaurants by the fk of the city.
+In my app, I choose to not use the bidirectional relations, because we don't need it to retrieve the information, 
+I can simply filter the restaurants by the fk of the city. But this will imply to modify CLI relations access.
 - **Que faire dans le Data Mapper lors de la recherche du restaurant (rechercher uniquement le
 restaurant ? également ses évaluations ? également ses notes ? où est-ce que l’on s’arrête ?)** :
 In choose to load all data directly, because the app holds a small data set, and the cache will mitigate the

@@ -1,10 +1,7 @@
 package ch.hearc.ig.guideresto.application;
 
 import ch.hearc.ig.guideresto.persistence.FakeItems;
-import ch.hearc.ig.guideresto.persistence.mappers.CityMapper;
-import ch.hearc.ig.guideresto.persistence.mappers.EvaluationCriteriaMapper;
-import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
-import ch.hearc.ig.guideresto.persistence.mappers.RestaurantTypeMapper;
+import ch.hearc.ig.guideresto.persistence.mappers.*;
 import ch.hearc.ig.guideresto.persistence.services.CityService;
 import ch.hearc.ig.guideresto.persistence.services.EvaluationCriteriaService;
 import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
@@ -16,6 +13,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
+        //var test = new BasicEvaluationMapper().getAll();
+        var test = new BasicEvaluationMapper().getWhere("FK_REST", "1");
 
         var scanner = new Scanner(System.in);
 

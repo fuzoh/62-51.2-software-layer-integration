@@ -47,9 +47,9 @@ public class CityMapper extends AbstractMapper<City> {
     @Override
     public Set<City> getWhere(String column, String value) {
         try (var query = DatabaseProvider
-                .preparedQueryOf("select NUMERO, CODE_POSTAL, NOM_VILLE from VILLES where ? = ?")
+                .preparedQueryOf("select NUMERO, CODE_POSTAL, NOM_VILLE from VILLES where " + column + " = ?")
         ) {
-            return mapAll(query.bind(column).bind(value).execute());
+            return mapAll(query.bind(value).execute());
         } catch (Exception e) {
             throw new DatabaseMapperException("Error while executing mapper query findAll", e);
         }
