@@ -1,6 +1,8 @@
 package ch.hearc.ig.guideresto.business;
 
-public class EvaluationCriteria {
+import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+
+public class EvaluationCriteria implements CacheAble {
 
     private Integer id;
     private String name;

@@ -23,7 +23,7 @@ public class RestaurantMapper extends AbstractMapper<Restaurant> {
                 rs.getString("SITE_WEB"),
                 rs.getString("ADRESSE"),
                 // Eager load relations, without inner join -> this will cause N+1 problem to appear
-                // TODO : mitigate this problem introducing cache in relations
+                // TODO : mitigate this problem introducing cache in relations via the cache class
                 getToOneRelation(new CityMapper(), rs.getInt("FK_VILL")),
                 getToOneRelation(new RestaurantTypeMapper(), rs.getInt("FK_TYPE"))
         );
@@ -47,9 +47,7 @@ public class RestaurantMapper extends AbstractMapper<Restaurant> {
                 .preparedQueryOf(
                         "select NUMERO, NOM, DESCRIPTION, SITE_WEB, ADRESSE, FK_VILL, FK_TYPE from RESTAURANTS")
         ) {
-            var test = mapAll(query.execute());
-            System.out.println(test.toString());
-            return test;
+            return mapAll(query.execute());
         } catch (Exception e) {
             throw new DatabaseMapperException("Error while executing mapper query findAll", e);
         }
@@ -115,6 +113,16 @@ public class RestaurantMapper extends AbstractMapper<Restaurant> {
 
     @Override
     public Restaurant delete(Restaurant entity) {
-        return null;
+        try (var query = DatabaseProvider
+                .preparedQueryOf(
+                        "delete from RESTAURANTS where NUMERO = ?")
+        ) {
+            query
+                    .bind(entity.getId())
+                    .executeUpdate();
+            return entity; // the deleted entity
+        } catch (Exception e) {
+            throw new DatabaseMapperException("Error while executing mapper query insert", e);
+        }
     }
 }

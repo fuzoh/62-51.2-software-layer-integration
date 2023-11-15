@@ -15,8 +15,8 @@ public class Restaurant implements CacheAble {
     private Set<Evaluation> evaluations;
     private Localisation address;
     private RestaurantType type;
-
-    public Restaurant(Integer id, String name, String description, String website, String street, City city, RestaurantType type) {
+    public Restaurant(Integer id, String name, String description, String website, String street, City city,
+                      RestaurantType type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -34,8 +34,20 @@ public class Restaurant implements CacheAble {
         // TODO : this.address = new Localisation(street);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getZipCode() {
@@ -52,10 +64,6 @@ public class Restaurant implements CacheAble {
 
     public City getCity() {
         return address.getCity();
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -101,9 +109,5 @@ public class Restaurant implements CacheAble {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 }

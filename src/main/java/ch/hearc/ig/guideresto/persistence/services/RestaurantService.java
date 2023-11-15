@@ -1,6 +1,7 @@
 package ch.hearc.ig.guideresto.persistence.services;
 
 import ch.hearc.ig.guideresto.business.Restaurant;
+import ch.hearc.ig.guideresto.business.RestaurantType;
 import ch.hearc.ig.guideresto.persistence.cache.Cache;
 import ch.hearc.ig.guideresto.persistence.database.DatabaseProvider;
 import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
@@ -35,14 +36,23 @@ public class RestaurantService {
     }
 
     public Set<Restaurant> searchByCityName(String needle) {
-        if (cache.isEmpty()) {
-            cache.populate(restaurantMapper.getAll());
-        }
+        getAll(); // Update cache if necessary
         return cache.getMatches(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(needle.toUpperCase()));
     }
 
     public void add(Restaurant restaurant) {
         cache.update(restaurantMapper.insert(restaurant));
         DatabaseProvider.commit();
+    }
+
+    public Set<Restaurant> getByType(RestaurantType chosenType) {
+        getAll(); // Update cache if necessary
+        return cache.getMatches(r -> r.getType().getLabel().equalsIgnoreCase(chosenType.getLabel()));
+    }
+
+    public void remove(Restaurant restaurant) {
+        var removed = restaurantMapper.delete(restaurant);
+        DatabaseProvider.commit();
+        cache.remove(removed); // remove from cache only if transaction passes
     }
 }

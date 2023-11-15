@@ -3,6 +3,7 @@ package ch.hearc.ig.guideresto.presentation;
 import ch.hearc.ig.guideresto.business.*;
 import ch.hearc.ig.guideresto.persistence.FakeItems;
 import ch.hearc.ig.guideresto.persistence.services.CityService;
+import ch.hearc.ig.guideresto.persistence.services.EvaluationCriteriaService;
 import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
 import ch.hearc.ig.guideresto.persistence.services.RestaurantTypesService;
 
@@ -16,7 +17,6 @@ import java.util.Scanner;
 import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toUnmodifiableSet;
 
 public class CLI {
 
@@ -26,16 +26,19 @@ public class CLI {
     private final RestaurantService restaurantService;
     private final CityService cityService;
     private final RestaurantTypesService restaurantTypeService;
+    private final EvaluationCriteriaService evaluationCriteriaService;
 
     // Injection de dépendances
     public CLI(Scanner scanner, PrintStream printStream, FakeItems fakeItems, RestaurantService restaurantService,
-               CityService cityService, RestaurantTypesService restaurantTypeService) {
+               CityService cityService, RestaurantTypesService restaurantTypeService,
+               EvaluationCriteriaService evaluationCriteriaService) {
         this.scanner = scanner;
         this.printStream = printStream;
         this.fakeItems = fakeItems;
         this.restaurantService = restaurantService;
         this.cityService = cityService;
         this.restaurantTypeService = restaurantTypeService;
+        this.evaluationCriteriaService = evaluationCriteriaService;
     }
 
     public void start() {
@@ -191,11 +194,12 @@ public class CLI {
         Set<RestaurantType> restaurantTypes = restaurantTypeService.getAll();
         RestaurantType chosenType = pickRestaurantType(restaurantTypes);
 
-        Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
-                                               .stream()
-                                               .filter(r -> r.getType().getLabel()
-                                                             .equalsIgnoreCase(chosenType.getLabel()))
-                                               .collect(toUnmodifiableSet());
+        // REPLACED Set<Restaurant> restaurants = fakeItems.getAllRestaurants()
+        //                                         .stream()
+        //                                         .filter(r -> r.getType().getLabel()
+        //                                                       .equalsIgnoreCase(chosenType.getLabel()))
+        //                                         .collect(toUnmodifiableSet());
+        Set<Restaurant> restaurants = restaurantService.getByType(chosenType);
 
         Optional<Restaurant> maybeRestaurant = pickRestaurant(restaurants);
         maybeRestaurant.ifPresent(this::showRestaurant);
@@ -350,7 +354,8 @@ public class CLI {
 
         println("Veuillez svp donner une note entre 1 et 5 pour chacun de ces critères : ");
 
-        Set<EvaluationCriteria> evaluationCriterias = fakeItems.getEvaluationCriterias();
+        // REPLACED : Set<EvaluationCriteria> evaluationCriterias = fakeItems.getEvaluationCriterias();
+        Set<EvaluationCriteria> evaluationCriterias = evaluationCriteriaService.getAll();
 
         evaluationCriterias.forEach(currentCriteria -> {
             println(currentCriteria.getName() + " : " + currentCriteria.getDescription());
@@ -373,10 +378,12 @@ public class CLI {
         restaurant.setWebsite(readString());
         println("Nouveau type de restaurant : ");
 
-        Set<RestaurantType> restaurantTypes = fakeItems.getRestaurantTypes();
+        // Set<RestaurantType> restaurantTypes = fakeItems.getRestaurantTypes();
+        Set<RestaurantType> restaurantTypes = restaurantTypeService.getAll();
 
         RestaurantType newType = pickRestaurantType(restaurantTypes);
         if (newType != restaurant.getType()) {
+            // TODO : Will not work for now, beacuse the data mapper does not handle the inverse of the relation actually
             restaurant.getType().getRestaurants()
                       .remove(restaurant); // Il faut d'abord supprimer notre restaurant puisque le type va peut-être changer
             newType.getRestaurants().add(restaurant);
@@ -392,7 +399,8 @@ public class CLI {
         println("Nouvelle rue : ");
         restaurant.getAddress().setStreet(readString());
 
-        Set<City> cities = fakeItems.getCities();
+        // Set<City> cities = fakeItems.getCities();
+        Set<City> cities = cityService.getAll();
 
         City newCity = pickCity(cities);
         if (newCity.equals(restaurant.getAddress().getCity())) {
@@ -410,7 +418,8 @@ public class CLI {
         if ("o".equalsIgnoreCase(choice)) {
             restaurant.getAddress().getCity().getRestaurants().remove(restaurant);
             restaurant.getType().getRestaurants().remove(restaurant);
-            fakeItems.getAllRestaurants().remove(restaurant);
+            // fakeItems.getAllRestaurants().remove(restaurant);
+            restaurantService.remove(restaurant);
             println("Le restaurant a bien été supprimé !");
         }
     }

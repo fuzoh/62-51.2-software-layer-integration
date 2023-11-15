@@ -64,4 +64,8 @@ public class Cache<T> {
     public Set<T> getAll() {
         return data;
     }
+
+    public void remove(T element) {
+        data.remove(element);
+    }
 }
