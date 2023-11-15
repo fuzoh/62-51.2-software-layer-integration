@@ -16,17 +16,32 @@ import java.util.Set;
 public class RestaurantMapper extends AbstractMapper<Restaurant> {
     @Override
     protected Restaurant mapToObj(ResultSet rs) throws SQLException {
-        return new Restaurant(
+        var fkCity = rs.getInt("FK_VILL");
+        var fkType = rs.getInt("FK_TYPE");
+        var restaurant = new Restaurant(
                 rs.getInt("NUMERO"),
                 rs.getString("NOM"),
                 rs.getString("DESCRIPTION"),
                 rs.getString("SITE_WEB"),
                 rs.getString("ADRESSE"),
                 // Eager load relations, without inner join -> this will cause N+1 problem to appear
-                // TODO : mitigate this problem introducing cache in relations via the cache class
-                getToOneRelation(new CityMapper(), rs.getInt("FK_VILL")),
-                getToOneRelation(new RestaurantTypeMapper(), rs.getInt("FK_TYPE"))
+                // I try to mitigate this problem introducing cache in relations via the cache class
+                Cache.getCacheInstance(City.class).getFirstOr(
+                        c -> c.getId() == fkCity,
+                        () -> getToOneRelation(new CityMapper(), fkCity)
+                ),
+                Cache.getCacheInstance(RestaurantType.class).getFirstOr(
+                        r -> r.getId() == fkType,
+                        () -> getToOneRelation(new RestaurantTypeMapper(), fkType)
+                )
         );
+        // get all evaluations from custom mapper
+        restaurant.getEvaluations().addAll(
+                new EvaluationGenericMapper()
+                        .getAllEvaluationsByRestaurant(rs.getInt("NUMERO")
+                        )
+        );
+        return restaurant;
     }
 
     @Override

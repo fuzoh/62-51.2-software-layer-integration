@@ -1,10 +1,12 @@
 package ch.hearc.ig.guideresto.business;
 
+import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CompleteEvaluation extends Evaluation {
+public class CompleteEvaluation extends Evaluation implements CacheAble {
 
   private String comment;
   private String username;

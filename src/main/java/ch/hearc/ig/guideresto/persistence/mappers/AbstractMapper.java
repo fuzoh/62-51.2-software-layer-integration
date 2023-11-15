@@ -33,11 +33,11 @@ public abstract class AbstractMapper<T> implements Mapper<T> {
         return allData;
     }
 
-    protected <E> E getToOneRelation(Mapper<E> mapper, int value) throws SQLException {
+    protected <E> E getToOneRelation(Mapper<E> mapper, int value) {
         return mapper.find(value).orElseThrow();
     }
 
-    protected <E> Set<E> getToManyRelation(Mapper<E> mapper, String field, String value) throws SQLException {
+    protected <E> Set<E> getToManyRelation(Mapper<E> mapper, String field, String value) {
         return mapper.getWhere(field, value);
     }
 }

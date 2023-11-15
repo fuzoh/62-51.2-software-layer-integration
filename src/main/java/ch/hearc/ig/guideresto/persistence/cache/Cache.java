@@ -2,7 +2,9 @@ package ch.hearc.ig.guideresto.persistence.cache;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Cache<T> {
@@ -47,8 +49,33 @@ public class Cache<T> {
         return data.stream().filter(predicate).findFirst();
     }
 
+    /**
+     * This method allows to test if a given element is present in cache, if not,
+     * you provide a supplier that will populate the cache
+     */
+    public T getFirstOr(Predicate<T> predicate, Supplier<T> supplier) {
+        var element = getFirst(predicate);
+        if (element.isEmpty()) {
+            element = Optional.of(supplier.get());
+            update(element.get());
+        }
+        return element.get();
+    }
+
     public Set<T> getMatches(Predicate<T> predicate) {
         return data.stream().filter(predicate).collect(Collectors.toSet());
+    }
+
+    /**
+     * This method allows to test if a given suite element is present in cache, if not,
+     * you provide a supplier that will populate the cache
+     */
+    public Set<T> getMatchesOr(Predicate<T> predicate, Supplier<Set<T>> supplier) {
+        var elements = getMatches(predicate);
+        if (elements.isEmpty()) {
+            elements.addAll(supplier.get());
+        }
+        return elements;
     }
 
     // To check if the cache already contain items

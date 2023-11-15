@@ -1,8 +1,10 @@
 package ch.hearc.ig.guideresto.business;
 
+import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+
 import java.time.LocalDate;
 
-public class BasicEvaluation extends Evaluation {
+public class BasicEvaluation extends Evaluation implements CacheAble {
 
   private boolean likeRestaurant;
   private String ipAddress;
