@@ -14,13 +14,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //var test = new BasicEvaluationMapper().getAll();
-        var test = new BasicEvaluationMapper().getWhere("FK_REST", "1");
-
         var scanner = new Scanner(System.in);
 
-        var fakeItems = new FakeItems();
+        // var fakeItems = new FakeItems();
 
+        // Start services
         var cityService = new CityService(new CityMapper());
         var restaurantTypeService = new RestaurantTypesService(new RestaurantTypeMapper());
         var restaurantService = new RestaurantService(
@@ -32,7 +30,7 @@ public class Main {
         var cli = new CLI(
                 scanner,
                 printStream,
-                fakeItems,
+                /*fakeItems,*/
                 restaurantService,
                 cityService,
                 restaurantTypeService,

@@ -7,9 +7,16 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a generic cache implementation, it allows to store data in memory
+ * it also implements a static singleton like pattern to ensure that only one cache instance by type is created
+ * @param <T> The type of the data class that the cache instance will cache
+ */
 public class Cache<T> {
 
-    // Store all actives caches by entity type
+    /**
+     * Static store for all cache instances
+     */
     static Map<Class<? extends CacheAble>, Cache<? extends CacheAble>> caches = new HashMap<>();
 
     /**
@@ -22,7 +29,7 @@ public class Cache<T> {
         if (!caches.containsKey(type)) {
             caches.put(type, new Cache<E>());
         }
-        return (Cache<E>) caches.get(type);
+        return (Cache<E>) caches.get(type); // We need to cast to get autocomplete, this is "safe" because the type is checked with the generic
     }
 
     Set<T> data;

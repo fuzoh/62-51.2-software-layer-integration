@@ -22,19 +22,19 @@ public class CLI {
 
     private final Scanner scanner;
     private final PrintStream printStream;
-    private final FakeItems fakeItems;
+    //private final FakeItems fakeItems;
     private final RestaurantService restaurantService;
     private final CityService cityService;
     private final RestaurantTypesService restaurantTypeService;
     private final EvaluationCriteriaService evaluationCriteriaService;
 
     // Injection de dépendances
-    public CLI(Scanner scanner, PrintStream printStream, FakeItems fakeItems, RestaurantService restaurantService,
+    public CLI(Scanner scanner, PrintStream printStream, /*FakeItems fakeItems,*/ RestaurantService restaurantService,
                CityService cityService, RestaurantTypesService restaurantTypeService,
                EvaluationCriteriaService evaluationCriteriaService) {
         this.scanner = scanner;
         this.printStream = printStream;
-        this.fakeItems = fakeItems;
+        //this.fakeItems = fakeItems;
         this.restaurantService = restaurantService;
         this.cityService = cityService;
         this.restaurantTypeService = restaurantTypeService;
