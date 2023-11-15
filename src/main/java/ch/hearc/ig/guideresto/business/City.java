@@ -1,9 +1,12 @@
 package ch.hearc.ig.guideresto.business;
 
+import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-public class City {
+public class City implements CacheAble {
     private Integer id;
     private String zipCode;
     private String cityName;
@@ -15,7 +18,15 @@ public class City {
         this.cityName = cityName;
         this.restaurants = new HashSet<>();
     }
-    
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getZipCode() {
         return zipCode;
     }
@@ -26,6 +37,19 @@ public class City {
 
     public Set<Restaurant> getRestaurants() {
         return restaurants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        City city = (City) o;
+        return Objects.equals(getId(), city.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
     @Override

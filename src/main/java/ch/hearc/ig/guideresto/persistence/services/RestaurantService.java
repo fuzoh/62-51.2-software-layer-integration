@@ -2,6 +2,7 @@ package ch.hearc.ig.guideresto.persistence.services;
 
 import ch.hearc.ig.guideresto.business.Restaurant;
 import ch.hearc.ig.guideresto.persistence.cache.Cache;
+import ch.hearc.ig.guideresto.persistence.database.DatabaseProvider;
 import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
 
 import java.util.Set;
@@ -41,6 +42,7 @@ public class RestaurantService {
     }
 
     public void add(Restaurant restaurant) {
-        // TODO : transaction and add restaurant to database !!!
+        cache.update(restaurantMapper.insert(restaurant));
+        DatabaseProvider.commit();
     }
 }

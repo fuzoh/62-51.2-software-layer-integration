@@ -1,9 +1,12 @@
 package ch.hearc.ig.guideresto.business;
 
+import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-public class Restaurant {
+public class Restaurant implements CacheAble {
 
     private Integer id;
     private String name;
@@ -47,6 +50,10 @@ public class Restaurant {
         return address.getCity().getCityName();
     }
 
+    public City getCity() {
+        return address.getCity();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -81,5 +88,22 @@ public class Restaurant {
 
     public void setType(RestaurantType type) {
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurant that = (Restaurant) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

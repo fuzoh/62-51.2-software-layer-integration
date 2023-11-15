@@ -19,7 +19,7 @@ public class CityService {
     }
 
     public void insert(City city) {
-        cache.add(cityMapper.insert(city));
+        cache.update(cityMapper.insert(city));
         DatabaseProvider.commit();
     }
 

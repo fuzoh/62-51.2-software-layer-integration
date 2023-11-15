@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class Cache<T> {
 
     // Store all actives caches by entity type
-    static Map<Class, Cache> caches = new HashMap<>();
+    static Map<Class<? extends CacheAble>, Cache<? extends CacheAble>> caches = new HashMap<>();
 
     /**
      * This is a kind of singleton for cache instances
@@ -16,11 +16,11 @@ public class Cache<T> {
      * Every time a cache is requested for a given data type
      * A check is made in the caches store and return it or create it
      */
-    public static <E> Cache<E> getCacheInstance(Class<E> type) {
+    public static <E extends CacheAble> Cache<E> getCacheInstance(Class<E> type) {
         if (!caches.containsKey(type)) {
             caches.put(type, new Cache<E>());
         }
-        return caches.get(type);
+        return (Cache<E>) caches.get(type);
     }
 
     Set<T> data;
@@ -35,8 +35,12 @@ public class Cache<T> {
         return this;
     }
 
-    public void add(T element) {
-        data.add(element);
+    public T update(T element) {
+        if (!data.add(element)) {
+            data.remove(element);
+            data.add(element);
+        }
+        return element;
     }
 
     public Optional<T> getFirst(Predicate<T> predicate) {

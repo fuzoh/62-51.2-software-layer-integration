@@ -1,5 +1,6 @@
 package ch.hearc.ig.guideresto.application;
 
+import ch.hearc.ig.guideresto.business.City;
 import ch.hearc.ig.guideresto.persistence.FakeItems;
 import ch.hearc.ig.guideresto.persistence.mappers.CityMapper;
 import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
@@ -14,13 +15,16 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
         var scanner = new Scanner(System.in);
 
         var fakeItems = new FakeItems();
 
-        var restaurantService = new RestaurantService(new RestaurantMapper());
         var cityService = new CityService(new CityMapper());
         var restaurantTypeService = new RestaurantTypesService(new RestaurantTypeMapper());
+        var restaurantService = new RestaurantService(
+                new RestaurantMapper()
+        );
 
         var printStream = System.out;
         var cli = new CLI(
