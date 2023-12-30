@@ -34,6 +34,12 @@ public class City implements Serializable {
         this.restaurants = new HashSet<>();
     }
 
+    public City(String zipCode, String cityName) {
+        this.zipCode = zipCode;
+        this.cityName = cityName;
+        this.restaurants = new HashSet<>();
+    }
+
     public City() {
     }
 
