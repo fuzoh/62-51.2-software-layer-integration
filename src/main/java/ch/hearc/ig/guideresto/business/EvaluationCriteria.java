@@ -1,14 +1,28 @@
 package ch.hearc.ig.guideresto.business;
 
-import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class EvaluationCriteria implements CacheAble {
+@Entity
+@Table(name = "CRITERES_EVALUATION")
+public class EvaluationCriteria implements Serializable {
 
+    @Id
+    @Column(name = "NUMERO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CRITERES_EVALUATION")
     private Integer id;
+
+    @Column(name = "NOM")
     private String name;
+
+    @Column(name = "DESCRIPTION")
     private String description;
+
+    public EvaluationCriteria() {
+    }
 
     public EvaluationCriteria(Integer id, String name, String description) {
         this.id = id;
@@ -17,16 +31,23 @@ public class EvaluationCriteria implements CacheAble {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         EvaluationCriteria that = (EvaluationCriteria) o;
-        return Objects.equals(getId(), that.getId());
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                                                                       .getPersistentClass()
+                                                                       .hashCode() : getClass().hashCode();
     }
 
     public Integer getId() {

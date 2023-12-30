@@ -1,17 +1,32 @@
 package ch.hearc.ig.guideresto.business;
 
-import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class RestaurantType implements CacheAble {
+@Entity
+@Table(name = "TYPES_GASTRONOMIQUES")
+public class RestaurantType implements Serializable {
 
+    @Id
+    @Column(name = "NUMERO", nullable = false)
     private Integer id;
+
+    @Column(name = "LIBELLE", nullable = false, length = 100)
     private String label;
+
+    @Column(name = "DESCRIPTION", nullable = false)
     private String description;
-    private Set<Restaurant> restaurants;
+
+    @OneToMany(mappedBy = "type")
+    private Set<Restaurant> restaurants = new LinkedHashSet<>();
+
+    public RestaurantType() {
+    }
 
     public RestaurantType(Integer id, String label, String description) {
         this.id = id;
@@ -38,6 +53,10 @@ public class RestaurantType implements CacheAble {
 
     public Set<Restaurant> getRestaurants() {
         return restaurants;
+    }
+
+    public void setRestaurants(Set<Restaurant> restaurants) {
+        this.restaurants = restaurants;
     }
 
     @Override

@@ -1,13 +1,34 @@
 package ch.hearc.ig.guideresto.business;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
-public abstract class Evaluation {
+@MappedSuperclass
+public abstract class Evaluation implements Serializable {
 
+    @Id
+    @Column(name = "NUMERO")
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "SEQ_EVAL"
+    )
     private Integer id;
+
+    @Column(name = "DATE_EVAL")
     private LocalDate visitDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "FK_REST")
     private Restaurant restaurant;
+
+    public Evaluation() {
+    }
+
     public Evaluation(Integer id, LocalDate visitDate, Restaurant restaurant) {
         this.id = id;
         this.visitDate = visitDate;
@@ -22,16 +43,4 @@ public abstract class Evaluation {
         this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Evaluation that = (Evaluation) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

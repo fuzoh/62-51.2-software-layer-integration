@@ -1,10 +1,26 @@
 package ch.hearc.ig.guideresto.business;
 
-public class Localisation {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import org.hibernate.proxy.HibernateProxy;
 
-    private String street;
-    private City city;
+import java.io.Serializable;
+import java.util.Objects;
 
+@Embeddable
+public class Localisation implements Serializable {
+
+    @Column(name = "ADRESSE")
+    String street;
+
+    @ManyToOne
+    @JoinColumn(name = "FK_VILL")
+    City city;
+
+    public Localisation() {
+    }
     public Localisation(String street, City city) {
         this.street = street;
         this.city = city;
@@ -24,5 +40,24 @@ public class Localisation {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o)
+                .getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Localisation that = (Localisation) o;
+        return getStreet() != null && Objects.equals(getStreet(), that.getStreet())
+                && getCity() != null && Objects.equals(getCity(), that.getCity());
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(street, city);
     }
 }

@@ -1,15 +1,29 @@
 package ch.hearc.ig.guideresto.business;
 
-import ch.hearc.ig.guideresto.persistence.cache.CacheAble;
+import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class City implements CacheAble {
+@Entity
+@Table(name = "VILLES")
+public class City implements Serializable {
+
+    @Id
+    @Column(name = "NUMERO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_VILLES")
     private Integer id;
+
+    @Column(name = "CODE_POSTAL")
     private String zipCode;
+
+    @Column(name = "NOM_VILLE")
     private String cityName;
+
+    @OneToMany(mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Restaurant> restaurants;
 
     public City(Integer id, String zipCode, String cityName) {
@@ -17,6 +31,9 @@ public class City implements CacheAble {
         this.zipCode = zipCode;
         this.cityName = cityName;
         this.restaurants = new HashSet<>();
+    }
+
+    public City() {
     }
 
     public Integer getId() {
@@ -40,25 +57,27 @@ public class City implements CacheAble {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         City city = (City) o;
-        return Objects.equals(getId(), city.getId());
+        return getId() != null && Objects.equals(getId(), city.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                                                                       .getPersistentClass()
+                                                                       .hashCode() : getClass().hashCode();
     }
 
     @Override
     public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", zipCode='" + zipCode + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", restaurants=" + restaurants +
-                '}';
+        return "City{" + "id=" + id + ", zipCode='" + zipCode + '\'' + ", cityName='" + cityName + '\'' + ", restaurants=" + restaurants + '}';
     }
 }
