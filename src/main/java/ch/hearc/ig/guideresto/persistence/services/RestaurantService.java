@@ -2,57 +2,28 @@ package ch.hearc.ig.guideresto.persistence.services;
 
 import ch.hearc.ig.guideresto.business.Restaurant;
 import ch.hearc.ig.guideresto.business.RestaurantType;
-import ch.hearc.ig.guideresto.persistence.cache.Cache;
-import ch.hearc.ig.guideresto.persistence.database.DatabaseProvider;
-import ch.hearc.ig.guideresto.persistence.mappers.RestaurantMapper;
 
 import java.util.Set;
 
 public class RestaurantService {
 
-    private final RestaurantMapper restaurantMapper;
-
-    private final Cache<Restaurant> cache;
-
-    public RestaurantService(RestaurantMapper restaurantMapper) {
-        this.restaurantMapper = restaurantMapper;
-        this.cache = Cache.getCacheInstance(Restaurant.class);
-    }
-
     public Set<Restaurant> getAll() {
-        // Check if elements are in the cache
-        // Probably not a good thing, because it not guaranties that the cache is up-to-date with db
-        if (cache.isEmpty()) {
-            cache.populate(restaurantMapper.getAll());
-        }
-        return cache.getAll();
+        return null;
     }
 
     public Set<Restaurant> searchByName(String needle) {
-        if (cache.isEmpty()) {
-            cache.populate(restaurantMapper.getAll());
-        }
-        return cache.getMatches(r -> r.getName().equalsIgnoreCase(needle));
-    }
-
-    public Set<Restaurant> searchByCityName(String needle) {
-        getAll(); // Update cache if necessary
-        return cache.getMatches(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(needle.toUpperCase()));
+        return null;
     }
 
     public void add(Restaurant restaurant) {
-        cache.update(restaurantMapper.insert(restaurant));
-        DatabaseProvider.commit();
+        //
     }
 
     public Set<Restaurant> getByType(RestaurantType chosenType) {
-        getAll(); // Update cache if necessary
-        return cache.getMatches(r -> r.getType().getLabel().equalsIgnoreCase(chosenType.getLabel()));
+        return null;
     }
 
     public void remove(Restaurant restaurant) {
-        var removed = restaurantMapper.delete(restaurant);
-        DatabaseProvider.commit();
-        cache.remove(removed); // remove from cache only if transaction passes
+        //
     }
 }

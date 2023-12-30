@@ -128,9 +128,9 @@ public class Restaurant implements Serializable {
         this.website = website;
     }
 
-    //public Set<Evaluation> getEvaluations() {
-    //    return evaluations;
-    //}
+    public Set<Evaluation> getEvaluations() {
+        return null;
+    }
 
     //public void setEvaluations(Set<Evaluation> evaluations) {
     //    this.evaluations = evaluations;
