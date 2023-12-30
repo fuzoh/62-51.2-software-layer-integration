@@ -16,6 +16,11 @@ public abstract class Evaluation implements Serializable {
             strategy = GenerationType.SEQUENCE,
             generator = "SEQ_EVAL"
     )
+    @SequenceGenerator(
+            name = "SEQ_EVAL",
+            sequenceName = "SEQ_EVAL",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "DATE_EVAL")

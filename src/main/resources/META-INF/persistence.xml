@@ -25,6 +25,7 @@
                       value="true" />
 
             <property name="hibernate.generate_statistics" value="true"/>
+            <property name="jakarta.persistence.schema-generation.scripts.action" value="none"/>
         </properties>
 
     </persistence-unit>

@@ -15,6 +15,11 @@ public class Grade implements Serializable {
     @Id
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_NOTES")
+    @SequenceGenerator(
+            name = "SEQ_NOTES",
+            sequenceName = "SEQ_NOTES",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "NOTE", nullable = false)

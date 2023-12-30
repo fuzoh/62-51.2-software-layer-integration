@@ -1,9 +1,8 @@
 package ch.hearc.ig.guideresto.business;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
@@ -15,8 +14,9 @@ public class Localisation implements Serializable {
     @Column(name = "ADRESSE")
     String street;
 
-    @ManyToOne
-    @JoinColumn(name = "FK_VILL")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "FK_VILL", nullable = false)
     City city;
 
     public Localisation() {

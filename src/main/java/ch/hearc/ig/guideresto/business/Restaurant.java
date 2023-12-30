@@ -17,6 +17,11 @@ public class Restaurant implements Serializable {
     @Id
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESTAURANTS")
+    @SequenceGenerator(
+            name = "SEQ_RESTAURANTS",
+            sequenceName = "SEQ_RESTAURANTS",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "NOM")

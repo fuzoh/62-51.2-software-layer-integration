@@ -15,6 +15,7 @@ public class City implements Serializable {
     @Id
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_VILLES")
+    @SequenceGenerator(name = "SEQ_VILLES", sequenceName = "SEQ_VILLES", allocationSize = 1)
     private Integer id;
 
     @Column(name = "CODE_POSTAL")
@@ -23,7 +24,7 @@ public class City implements Serializable {
     @Column(name = "NOM_VILLE")
     private String cityName;
 
-    @OneToMany(mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Restaurant> restaurants;
 
     public City(Integer id, String zipCode, String cityName) {

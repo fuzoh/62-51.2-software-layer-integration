@@ -13,6 +13,11 @@ public class EvaluationCriteria implements Serializable {
     @Id
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CRITERES_EVALUATION")
+    @SequenceGenerator(
+            name = "SEQ_CRITERES_EVALUATION",
+            sequenceName = "SEQ_CRITERES_EVALUATION",
+            allocationSize = 1
+    )
     private Integer id;
 
     @Column(name = "NOM")
