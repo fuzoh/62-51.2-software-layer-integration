@@ -10,21 +10,22 @@
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver"
-                      value="oracle.jdbc.OracleDriver" />
+                      value="oracle.jdbc.OracleDriver"/>
 
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:oracle:thin:@db.ig.he-arc.ch:1521:ens" />
+                      value="jdbc:oracle:thin:@db.ig.he-arc.ch:1521:ens"/>
 
             <property name="jakarta.persistence.jdbc.user"
-                      value="BASTIEN_NICOUD" />
+                      value="BASTIEN_NICOUD"/>
 
             <property name="jakarta.persistence.jdbc.password"
-                      value="BASTIEN_NICOUD" />
+                      value="BASTIEN_NICOUD"/>
 
             <property name="hibernate.show_sql"
-                      value="true" />
+                      value="true"/>
 
             <property name="hibernate.generate_statistics" value="true"/>
+
             <property name="jakarta.persistence.schema-generation.scripts.action" value="none"/>
         </properties>
 
