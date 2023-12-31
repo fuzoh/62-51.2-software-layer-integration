@@ -26,7 +26,7 @@ public class Grade implements Serializable {
     private Integer grade;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JoinColumn(name = "FK_CRIT", nullable = false)
     private EvaluationCriteria criteria;
 

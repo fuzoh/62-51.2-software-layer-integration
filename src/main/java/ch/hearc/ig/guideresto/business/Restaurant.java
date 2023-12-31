@@ -18,9 +18,7 @@ public class Restaurant implements Serializable {
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESTAURANTS")
     @SequenceGenerator(
-            name = "SEQ_RESTAURANTS",
-            sequenceName = "SEQ_RESTAURANTS",
-            allocationSize = 1
+            name = "SEQ_RESTAURANTS", sequenceName = "SEQ_RESTAURANTS", allocationSize = 1
     )
     private Integer id;
 
@@ -36,22 +34,27 @@ public class Restaurant implements Serializable {
     @Embedded
     private Localisation address;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // I choose to load the type Eagerly, as it is displayed by CLI nearly systematically
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "FK_TYPE", nullable = false)
     private RestaurantType type;
 
     @OneToMany(mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CompleteEvaluation> completeEvaluation = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<BasicEvaluation> basicEvaluation = new LinkedHashSet<>();
 
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name, String description, String website, String street, City city,
-                      RestaurantType type) {
+    public Restaurant(
+            Integer id, String name, String description, String website, String street, City city,
+            RestaurantType type
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,7 +64,9 @@ public class Restaurant implements Serializable {
         this.type = type;
     }
 
-    public Restaurant(int id, String name, String description, String website, String street) {
+    public Restaurant(
+            int id, String name, String description, String website, String street
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -81,7 +86,9 @@ public class Restaurant implements Serializable {
         return completeEvaluation;
     }
 
-    public void setCompleteEvaluation(Set<CompleteEvaluation> completeEvaluation) {
+    public void setCompleteEvaluation(
+            Set<CompleteEvaluation> completeEvaluation
+    ) {
         this.completeEvaluation = completeEvaluation;
     }
 
@@ -133,10 +140,6 @@ public class Restaurant implements Serializable {
         this.website = website;
     }
 
-    public Set<Evaluation> getEvaluations() {
-        return null;
-    }
-
     //public void setEvaluations(Set<Evaluation> evaluations) {
     //    this.evaluations = evaluations;
     //}
@@ -157,8 +160,8 @@ public class Restaurant implements Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o)
+                .getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
                 .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
@@ -168,8 +171,9 @@ public class Restaurant implements Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                                                       .getPersistentClass()
-                                                                       .hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass()
+                .hashCode() : getClass().hashCode();
     }
+
 }

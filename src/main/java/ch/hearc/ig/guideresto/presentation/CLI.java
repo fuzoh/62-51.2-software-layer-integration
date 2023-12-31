@@ -1,7 +1,6 @@
 package ch.hearc.ig.guideresto.presentation;
 
 import ch.hearc.ig.guideresto.business.*;
-import ch.hearc.ig.guideresto.persistence.FakeItems;
 import ch.hearc.ig.guideresto.persistence.services.CityService;
 import ch.hearc.ig.guideresto.persistence.services.EvaluationCriteriaService;
 import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
@@ -145,15 +144,14 @@ public class CLI {
         //        .stream()
         //        .filter(r -> r.getAddress().getCity().getCityName().toUpperCase().contains(research.toUpperCase()))
         //        .collect(toUnmodifiableSet());
-        var restaurants = restaurantService.searchByName(research);
+        Set<Restaurant> restaurants = restaurantService.searchByCityName(research);
 
         Optional<Restaurant> maybeRestaurant = pickRestaurant(restaurants);
         maybeRestaurant.ifPresent(this::showRestaurant);
     }
 
     private City pickCity(Set<City> cities) {
-        println(
-                "Voici la liste des villes possibles, veuillez entrer le NPA de la ville désirée : ");
+        println("Voici la liste des villes possibles, veuillez entrer le NPA de la ville désirée : ");
 
         cities.forEach((currentCity) -> System.out
                 .println(currentCity.getZipCode() + " " + currentCity.getCityName()));
@@ -180,8 +178,7 @@ public class CLI {
                                 .map(currentType -> "\"" + currentType.getLabel() + "\" : " + currentType.getDescription())
                                 .collect(joining("\n"));
 
-        println(
-                "Voici la liste des types possibles, veuillez entrer le libellé exact du type désiré : ");
+        println("Voici la liste des types possibles, veuillez entrer le libellé exact du type désiré : ");
         println(typesText);
         String choice = readString();
 
@@ -216,10 +213,10 @@ public class CLI {
         println("Rue : ");
         String street = readString();
         City city;
+        // REPLACED : Set<City> cities = fakeItems.getCities();
+        Set<City> cities = cityService.getAll();
         do
         { // La sélection d'une ville est obligatoire, donc l'opération se répètera tant qu'aucune ville n'est sélectionnée.
-            // REPLACED : Set<City> cities = fakeItems.getCities();
-            Set<City> cities = cityService.getAll();
             city = pickCity(cities);
         } while (city == null);
 
@@ -232,6 +229,7 @@ public class CLI {
 
         Restaurant restaurant = new Restaurant(null, name, description, website, street, city,
                                                restaurantType);
+        // Add city on each side of the relation
         city.getRestaurants().add(restaurant);
         restaurant.getAddress().setCity(city);
         // REPLACED : Persist new restaurant to database
@@ -241,7 +239,8 @@ public class CLI {
         showRestaurant(restaurant);
     }
 
-    private void showRestaurant(Restaurant restaurant) {
+    private void showRestaurant(Restaurant restaurantToShow) {
+        Restaurant restaurant = restaurantService.loadEvaluations(restaurantToShow);
         String sb = restaurant.getName() + "\n" +
                 restaurant.getDescription() + "\n" +
                 restaurant.getType().getLabel() + "\n" +
@@ -249,14 +248,14 @@ public class CLI {
                 restaurant.getAddress().getStreet() + ", " +
                 restaurant.getAddress().getCity().getZipCode() + " " + restaurant.getAddress().getCity()
                                                                                  .getCityName() + "\n" +
-                "Nombre de likes : " + countLikes(restaurant.getEvaluations(), true) + "\n" +
-                "Nombre de dislikes : " + countLikes(restaurant.getEvaluations(), false) + "\n" +
+                // REPLACED : from `getEvaluation()` to getBasicEvaluation() -> see entity for details. Not possible to use polymorphism with mappedSuperClass
+                "Nombre de likes : " + countLikes(restaurant.getBasicEvaluation(), true) + "\n" +
+                "Nombre de dislikes : " + countLikes(restaurant.getBasicEvaluation(), false) + "\n" +
                 "\nEvaluations reçues : " + "\n";
 
-        String text = restaurant.getEvaluations()
+        // REPLACED : from `getEvaluation()` to getBasicEvaluation()
+        String text = restaurant.getCompleteEvaluation()
                                 .stream()
-                                .filter(CompleteEvaluation.class::isInstance)
-                                .map(CompleteEvaluation.class::cast)
                                 .map(this::getCompleteEvaluationDescription)
                                 .collect(joining("\n"));
 
@@ -272,10 +271,8 @@ public class CLI {
         } while (choice != 0 && choice != 6); // 6 car le restaurant est alors supprimé...
     }
 
-    private long countLikes(Set<Evaluation> evaluations, boolean likeRestaurant) {
+    private long countLikes(Set<BasicEvaluation> evaluations, boolean likeRestaurant) {
         return evaluations.stream()
-                          .filter(BasicEvaluation.class::isInstance)
-                          .map(BasicEvaluation.class::cast)
                           .filter(eval -> likeRestaurant == eval.isLikeRestaurant())
                           .count();
     }
@@ -329,7 +326,8 @@ public class CLI {
 
     private void addBasicEvaluation(Restaurant restaurant, Boolean like) {
         BasicEvaluation eval = new BasicEvaluation(null, LocalDate.now(), restaurant, like, getIpAddress());
-        restaurant.getEvaluations().add(eval);
+        restaurant.getBasicEvaluation().add(eval);
+        restaurantService.update(restaurant);
         println("Votre vote a été pris en compte !");
     }
 
@@ -350,7 +348,7 @@ public class CLI {
 
         CompleteEvaluation eval = new CompleteEvaluation(null, LocalDate.now(), restaurant, comment,
                                                          username);
-        restaurant.getEvaluations().add(eval);
+        restaurant.getCompleteEvaluation().add(eval);
 
         println("Veuillez svp donner une note entre 1 et 5 pour chacun de ces critères : ");
 
@@ -363,6 +361,8 @@ public class CLI {
             Grade grade = new Grade(null, note, eval, currentCriteria);
             eval.getGrades().add(grade);
         });
+
+        restaurantService.update(restaurant);
 
         println("Votre évaluation a bien été enregistrée, merci !");
     }
@@ -383,12 +383,13 @@ public class CLI {
 
         RestaurantType newType = pickRestaurantType(restaurantTypes);
         if (newType != restaurant.getType()) {
-            // TODO : Will not work for now, beacuse the data mapper does not handle the inverse of the relation actually
             restaurant.getType().getRestaurants()
                       .remove(restaurant); // Il faut d'abord supprimer notre restaurant puisque le type va peut-être changer
             newType.getRestaurants().add(restaurant);
             restaurant.setType(newType);
         }
+
+        restaurantService.update(restaurant);
 
         println("Merci, le restaurant a bien été modifié !");
     }
@@ -408,6 +409,8 @@ public class CLI {
             newCity.getRestaurants().add(restaurant);
             restaurant.getAddress().setCity(newCity);
         }
+
+        restaurantService.update(restaurant);
 
         println("L'adresse a bien été modifiée ! Merci !");
     }

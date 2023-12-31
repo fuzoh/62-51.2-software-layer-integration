@@ -14,7 +14,8 @@ public class Localisation implements Serializable {
     @Column(name = "ADRESSE")
     String street;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // I choose to load the type Eagerly, as it is displayed by CLI nearly systematically
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "FK_VILL", nullable = false)
     City city;

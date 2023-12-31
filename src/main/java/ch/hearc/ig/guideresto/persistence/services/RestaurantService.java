@@ -5,7 +5,9 @@ import ch.hearc.ig.guideresto.business.RestaurantType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import org.hibernate.Hibernate;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,30 @@ public class RestaurantService extends Service {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.remove(em.merge(restaurant));
+        em.getTransaction().commit();
+    }
+
+    public Set<Restaurant> searchByCityName(String needle) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Restaurant> query = em
+                .createQuery("SELECT r FROM Restaurant r JOIN r.address.city c WHERE c.cityName like :name", Restaurant.class)
+                .setParameter("name", "%" + needle + "%");
+        return query.getResultStream().collect(Collectors.toSet());
+    }
+
+    public Restaurant loadEvaluations(Restaurant restaurant) {
+        Objects.requireNonNull(restaurant.getId());
+        EntityManager em = emf.createEntityManager();
+        Restaurant managedRestaurant = em.merge(restaurant);
+        // Load eagerly all properties of the restaurant
+        Hibernate.initialize(managedRestaurant);
+        return managedRestaurant;
+    }
+
+    public void update(Restaurant restaurant) {
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(restaurant);
         em.getTransaction().commit();
     }
 }

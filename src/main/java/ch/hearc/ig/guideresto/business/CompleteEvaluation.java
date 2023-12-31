@@ -1,6 +1,8 @@
 package ch.hearc.ig.guideresto.business;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
@@ -22,6 +24,7 @@ public class CompleteEvaluation extends Evaluation implements Serializable {
     private String username;
 
     @OneToMany(mappedBy = "evaluation")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Grade> grades = new LinkedHashSet<>();
 
     public CompleteEvaluation() {
