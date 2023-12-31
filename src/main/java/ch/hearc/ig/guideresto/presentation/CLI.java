@@ -165,7 +165,7 @@ public class CLI {
             String zipCode = readString();
             println("Veuillez entrer le nom de la nouvelle ville : ");
             String cityName = readString();
-            City city = new City(1, zipCode, cityName);
+            City city = new City(zipCode, cityName);
             // REPLACED : fakeItems.getCities().add(city);
             cityService.insert(city);
             return city;
