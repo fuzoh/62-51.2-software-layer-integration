@@ -15,18 +15,16 @@ public class CityService extends Service {
     }
 
     public void insert(City city) {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            em.persist(city);
-            em.getTransaction().commit();
-        }
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(city);
+        em.getTransaction().commit();
     }
 
     public Set<City> getAll() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<City> query = em.createQuery("SELECT c FROM City c", City.class);
-            return query.getResultStream().collect(Collectors.toSet());
-        }
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<City> query = em.createQuery("SELECT c FROM City c", City.class);
+        return query.getResultStream().collect(Collectors.toSet());
     }
 
 }

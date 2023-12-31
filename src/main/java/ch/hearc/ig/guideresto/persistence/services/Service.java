@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 public abstract class Service {
 
-    EntityManagerFactory emf;
+    final EntityManagerFactory emf;
 
 
     public Service(EntityManagerFactory emf) {

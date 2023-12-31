@@ -1,10 +1,7 @@
 package ch.hearc.ig.guideresto.presentation;
 
 import ch.hearc.ig.guideresto.business.*;
-import ch.hearc.ig.guideresto.persistence.services.CityService;
-import ch.hearc.ig.guideresto.persistence.services.EvaluationCriteriaService;
-import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
-import ch.hearc.ig.guideresto.persistence.services.RestaurantTypesService;
+import ch.hearc.ig.guideresto.persistence.services.*;
 
 import java.io.PrintStream;
 import java.net.Inet4Address;
@@ -27,12 +24,14 @@ public class CLI {
     private final RestaurantTypesService restaurantTypeService;
     private final EvaluationCriteriaService evaluationCriteriaService;
 
+    private final GradeService gradeService;
+
     // Injection de dépendances
     public CLI(
             Scanner scanner, PrintStream printStream, /*FakeItems fakeItems,*/
             RestaurantService restaurantService, CityService cityService,
             RestaurantTypesService restaurantTypeService,
-            EvaluationCriteriaService evaluationCriteriaService
+            EvaluationCriteriaService evaluationCriteriaService, GradeService gradeService
     ) {
         this.scanner = scanner;
         this.printStream = printStream;
@@ -41,6 +40,7 @@ public class CLI {
         this.cityService = cityService;
         this.restaurantTypeService = restaurantTypeService;
         this.evaluationCriteriaService = evaluationCriteriaService;
+        this.gradeService = gradeService;
     }
 
     public void start() {
@@ -351,6 +351,7 @@ public class CLI {
                                                          username
         );
         restaurant.getCompleteEvaluation().add(eval);
+        restaurantService.update(restaurant);
 
         println("Veuillez svp donner une note entre 1 et 5 pour chacun de ces critères : ");
 
@@ -361,10 +362,9 @@ public class CLI {
             println(currentCriteria.getName() + " : " + currentCriteria.getDescription());
             Integer note = readInt();
             Grade grade = new Grade(null, note, eval, currentCriteria);
+            gradeService.add(grade);
             eval.getGrades().add(grade);
         });
-
-        restaurantService.update(restaurant);
 
         println("Votre évaluation a bien été enregistrée, merci !");
     }

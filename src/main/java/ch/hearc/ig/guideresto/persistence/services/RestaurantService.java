@@ -46,8 +46,9 @@ public class RestaurantService extends Service {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em
                 // Fetch type eagerly (`FETCH` keyword)
-                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.type t WHERE t = :type",
-                             Restaurant.class
+                .createQuery(
+                        "SELECT r FROM Restaurant r JOIN FETCH r.type t WHERE t = :type",
+                        Restaurant.class
                 ).setParameter("type", chosenType);
         return query.getResultStream().collect(Collectors.toSet());
     }

@@ -1,9 +1,6 @@
 package ch.hearc.ig.guideresto.application;
 
-import ch.hearc.ig.guideresto.persistence.services.CityService;
-import ch.hearc.ig.guideresto.persistence.services.EvaluationCriteriaService;
-import ch.hearc.ig.guideresto.persistence.services.RestaurantService;
-import ch.hearc.ig.guideresto.persistence.services.RestaurantTypesService;
+import ch.hearc.ig.guideresto.persistence.services.*;
 import ch.hearc.ig.guideresto.presentation.CLI;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -25,12 +22,15 @@ public class Main {
             var restaurantTypeService = new RestaurantTypesService(emf);
             var restaurantService = new RestaurantService(emf);
             var evaluationCriteriaService = new EvaluationCriteriaService(emf);
+            var gradeService = new GradeService(emf);
+
+            System.out.println(restaurantService.getAll());
 
             var printStream = System.out;
 
             // The original class to manage the user interactions
             var cli = new CLI(scanner, printStream, restaurantService, cityService,
-                              restaurantTypeService, evaluationCriteriaService
+                              restaurantTypeService, evaluationCriteriaService, gradeService
             );
 
             cli.start();
