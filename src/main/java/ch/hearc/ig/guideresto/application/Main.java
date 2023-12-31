@@ -16,18 +16,21 @@ public class Main {
 
         var scanner = new Scanner(System.in);
 
+        // Create EntityManagerFactory in try with resources, try will automatically close it
         try (EntityManagerFactory emf = Persistence.createEntityManagerFactory(
                 "guide-resto-persistence")) {
+
+            // The factory is injected into each services
             var cityService = new CityService(emf);
             var restaurantTypeService = new RestaurantTypesService(emf);
             var restaurantService = new RestaurantService(emf);
             var evaluationCriteriaService = new EvaluationCriteriaService(emf);
 
             var printStream = System.out;
-            var cli = new CLI(scanner, printStream,
-                    /*fakeItems,*/
-                              restaurantService, cityService, restaurantTypeService,
-                              evaluationCriteriaService
+
+            // The original class to manage the user interactions
+            var cli = new CLI(scanner, printStream, restaurantService, cityService,
+                              restaurantTypeService, evaluationCriteriaService
             );
 
             cli.start();
