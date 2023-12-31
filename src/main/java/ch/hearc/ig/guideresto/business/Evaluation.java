@@ -13,13 +13,10 @@ public abstract class Evaluation implements Serializable {
     @Id
     @Column(name = "NUMERO")
     @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEQ_EVAL"
+            strategy = GenerationType.SEQUENCE, generator = "SEQ_EVAL"
     )
     @SequenceGenerator(
-            name = "SEQ_EVAL",
-            sequenceName = "SEQ_EVAL",
-            allocationSize = 1
+            name = "SEQ_EVAL", sequenceName = "SEQ_EVAL", allocationSize = 1
     )
     private Integer id;
 

@@ -16,26 +16,23 @@ public class Main {
 
         var scanner = new Scanner(System.in);
 
-        try (EntityManagerFactory emf = Persistence.createEntityManagerFactory("guide-resto-persistence")) {
+        try (EntityManagerFactory emf = Persistence.createEntityManagerFactory(
+                "guide-resto-persistence")) {
             var cityService = new CityService(emf);
             var restaurantTypeService = new RestaurantTypesService(emf);
-            var restaurantService = new RestaurantService(
-                    emf
-            );
+            var restaurantService = new RestaurantService(emf);
             var evaluationCriteriaService = new EvaluationCriteriaService(emf);
 
             var printStream = System.out;
-            var cli = new CLI(
-                    scanner,
-                    printStream,
+            var cli = new CLI(scanner, printStream,
                     /*fakeItems,*/
-                    restaurantService,
-                    cityService,
-                    restaurantTypeService,
-                    evaluationCriteriaService);
+                              restaurantService, cityService, restaurantTypeService,
+                              evaluationCriteriaService
+            );
 
             cli.start();
         }
 
     }
+
 }

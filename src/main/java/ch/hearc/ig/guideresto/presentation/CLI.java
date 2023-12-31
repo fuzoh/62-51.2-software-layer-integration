@@ -28,9 +28,12 @@ public class CLI {
     private final EvaluationCriteriaService evaluationCriteriaService;
 
     // Injection de dépendances
-    public CLI(Scanner scanner, PrintStream printStream, /*FakeItems fakeItems,*/ RestaurantService restaurantService,
-               CityService cityService, RestaurantTypesService restaurantTypeService,
-               EvaluationCriteriaService evaluationCriteriaService) {
+    public CLI(
+            Scanner scanner, PrintStream printStream, /*FakeItems fakeItems,*/
+            RestaurantService restaurantService, CityService cityService,
+            RestaurantTypesService restaurantTypeService,
+            EvaluationCriteriaService evaluationCriteriaService
+    ) {
         this.scanner = scanner;
         this.printStream = printStream;
         //this.fakeItems = fakeItems;
@@ -87,20 +90,20 @@ public class CLI {
         }
     }
 
-    private Optional<Restaurant> pickRestaurant(Set<ch.hearc.ig.guideresto.business.Restaurant> restaurants) {
+    private Optional<Restaurant> pickRestaurant(
+            Set<ch.hearc.ig.guideresto.business.Restaurant> restaurants
+    ) {
         if (restaurants.isEmpty()) {
             println("Aucun restaurant n'a été trouvé !");
             return Optional.empty();
         }
 
         String restaurantsText = restaurants.stream()
-                                            .map(r -> "\"" + r.getName() + "\" - " + r.getStreet() + " - "
-                                                    + r.getZipCode() + " " + r.getCityName())
+                                            .map(r -> "\"" + r.getName() + "\" - " + r.getStreet() + " - " + r.getZipCode() + " " + r.getCityName())
                                             .collect(joining("\n", "", "\n"));
 
         println(restaurantsText);
-        println(
-                "Veuillez saisir le nom exact du restaurant dont vous voulez voir le détail, ou appuyez sur Enter pour revenir en arrière");
+        println("Veuillez saisir le nom exact du restaurant dont vous voulez voir le détail, ou appuyez sur Enter pour revenir en arrière");
         String choice = readString();
 
         return searchRestaurantByName(restaurants, choice);
@@ -153,8 +156,8 @@ public class CLI {
     private City pickCity(Set<City> cities) {
         println("Voici la liste des villes possibles, veuillez entrer le NPA de la ville désirée : ");
 
-        cities.forEach((currentCity) -> System.out
-                .println(currentCity.getZipCode() + " " + currentCity.getCityName()));
+        cities.forEach((currentCity) -> System.out.println(
+                currentCity.getZipCode() + " " + currentCity.getCityName()));
         println("Entrez \"NEW\" pour créer une nouvelle ville");
         String choice = readString();
 
@@ -228,7 +231,8 @@ public class CLI {
         restaurantType = pickRestaurantType(restaurantTypes);
 
         Restaurant restaurant = new Restaurant(null, name, description, website, street, city,
-                                               restaurantType);
+                                               restaurantType
+        );
         // Add city on each side of the relation
         city.getRestaurants().add(restaurant);
         restaurant.getAddress().setCity(city);
@@ -241,23 +245,20 @@ public class CLI {
 
     private void showRestaurant(Restaurant restaurantToShow) {
         Restaurant restaurant = restaurantService.loadEvaluations(restaurantToShow);
-        String sb = restaurant.getName() + "\n" +
-                restaurant.getDescription() + "\n" +
-                restaurant.getType().getLabel() + "\n" +
-                restaurant.getWebsite() + "\n" +
-                restaurant.getAddress().getStreet() + ", " +
-                restaurant.getAddress().getCity().getZipCode() + " " + restaurant.getAddress().getCity()
-                                                                                 .getCityName() + "\n" +
+        String sb = restaurant.getName() + "\n" + restaurant.getDescription() + "\n" + restaurant
+                .getType().getLabel() + "\n" + restaurant.getWebsite() + "\n" + restaurant
+                .getAddress().getStreet() + ", " + restaurant.getAddress().getCity()
+                                                             .getZipCode() + " " + restaurant
+                .getAddress().getCity().getCityName() + "\n" +
                 // REPLACED : from `getEvaluation()` to getBasicEvaluation() -> see entity for details. Not possible to use polymorphism with mappedSuperClass
-                "Nombre de likes : " + countLikes(restaurant.getBasicEvaluation(), true) + "\n" +
-                "Nombre de dislikes : " + countLikes(restaurant.getBasicEvaluation(), false) + "\n" +
-                "\nEvaluations reçues : " + "\n";
+                "Nombre de likes : " + countLikes(restaurant.getBasicEvaluation(),
+                                                  true
+        ) + "\n" + "Nombre de dislikes : " + countLikes(
+                restaurant.getBasicEvaluation(), false) + "\n" + "\nEvaluations reçues : " + "\n";
 
         // REPLACED : from `getEvaluation()` to getBasicEvaluation()
-        String text = restaurant.getCompleteEvaluation()
-                                .stream()
-                                .map(this::getCompleteEvaluationDescription)
-                                .collect(joining("\n"));
+        String text = restaurant.getCompleteEvaluation().stream()
+                                .map(this::getCompleteEvaluationDescription).collect(joining("\n"));
 
         println("Affichage d'un restaurant : ");
         println(sb);
@@ -272,8 +273,7 @@ public class CLI {
     }
 
     private long countLikes(Set<BasicEvaluation> evaluations, boolean likeRestaurant) {
-        return evaluations.stream()
-                          .filter(eval -> likeRestaurant == eval.isLikeRestaurant())
+        return evaluations.stream().filter(eval -> likeRestaurant == eval.isLikeRestaurant())
                           .count();
     }
 
@@ -325,7 +325,8 @@ public class CLI {
     }
 
     private void addBasicEvaluation(Restaurant restaurant, Boolean like) {
-        BasicEvaluation eval = new BasicEvaluation(null, LocalDate.now(), restaurant, like, getIpAddress());
+        BasicEvaluation eval = new BasicEvaluation(
+                null, LocalDate.now(), restaurant, like, getIpAddress());
         restaurant.getBasicEvaluation().add(eval);
         restaurantService.update(restaurant);
         println("Votre vote a été pris en compte !");
@@ -347,7 +348,8 @@ public class CLI {
         String comment = readString();
 
         CompleteEvaluation eval = new CompleteEvaluation(null, LocalDate.now(), restaurant, comment,
-                                                         username);
+                                                         username
+        );
         restaurant.getCompleteEvaluation().add(eval);
 
         println("Veuillez svp donner une note entre 1 et 5 pour chacun de ces critères : ");
@@ -427,16 +429,17 @@ public class CLI {
         }
     }
 
-    private Optional<Restaurant> searchRestaurantByName(Set<Restaurant> restaurants,
-                                                        String name) {
+    private Optional<Restaurant> searchRestaurantByName(
+            Set<Restaurant> restaurants, String name
+    ) {
         return restaurants.stream()
                           .filter(current -> current.getName().equalsIgnoreCase(name.toUpperCase()))
                           .findFirst();
     }
 
     private Optional<City> searchCityByZipCode(Set<City> cities, String zipCode) {
-        return cities.stream()
-                     .filter(current -> current.getZipCode().equalsIgnoreCase(zipCode.toUpperCase()))
+        return cities.stream().filter(current -> current.getZipCode()
+                                                        .equalsIgnoreCase(zipCode.toUpperCase()))
                      .findFirst();
     }
 
@@ -449,7 +452,8 @@ public class CLI {
     private int readInt() {
         int i = 0;
         boolean success = false;
-        do { // Tant que l'utilisateur n'aura pas saisi un nombre entier, on va lui demander une nouvelle saisie
+        do
+        { // Tant que l'utilisateur n'aura pas saisi un nombre entier, on va lui demander une nouvelle saisie
             try {
                 i = scanner.nextInt();
                 success = true;
@@ -471,4 +475,5 @@ public class CLI {
     private void println(String text) {
         printStream.println(text);
     }
+
 }

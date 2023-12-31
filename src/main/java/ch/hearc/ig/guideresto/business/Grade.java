@@ -16,9 +16,7 @@ public class Grade implements Serializable {
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_NOTES")
     @SequenceGenerator(
-            name = "SEQ_NOTES",
-            sequenceName = "SEQ_NOTES",
-            allocationSize = 1
+            name = "SEQ_NOTES", sequenceName = "SEQ_NOTES", allocationSize = 1
     )
     private Integer id;
 
@@ -37,7 +35,9 @@ public class Grade implements Serializable {
     public Grade() {
     }
 
-    public Grade(Integer id, Integer grade, CompleteEvaluation evaluation, EvaluationCriteria criteria) {
+    public Grade(
+            Integer id, Integer grade, CompleteEvaluation evaluation, EvaluationCriteria criteria
+    ) {
         this.id = id;
         this.grade = grade;
         this.evaluation = evaluation;
@@ -48,8 +48,8 @@ public class Grade implements Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o)
+                .getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
                 .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
@@ -59,9 +59,9 @@ public class Grade implements Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                                                       .getPersistentClass()
-                                                                       .hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass()
+                .hashCode() : getClass().hashCode();
     }
 
     public Integer getGrade() {
@@ -71,4 +71,5 @@ public class Grade implements Serializable {
     public EvaluationCriteria getCriteria() {
         return criteria;
     }
+
 }

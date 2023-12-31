@@ -16,8 +16,7 @@ public class RestaurantType implements Serializable {
     @Column(name = "NUMERO", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TYPES_GASTRONOMIQUES")
     @SequenceGenerator(
-            name = "SEQ_TYPES_GASTRONOMIQUES",
-            sequenceName = "SEQ_TYPES_GASTRONOMIQUES",
+            name = "SEQ_TYPES_GASTRONOMIQUES", sequenceName = "SEQ_TYPES_GASTRONOMIQUES",
             allocationSize = 1
     )
     private Integer id;
@@ -77,4 +76,5 @@ public class RestaurantType implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

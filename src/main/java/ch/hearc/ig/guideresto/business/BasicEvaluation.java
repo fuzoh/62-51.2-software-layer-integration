@@ -1,7 +1,10 @@
 package ch.hearc.ig.guideresto.business;
 
 import ch.hearc.ig.guideresto.business.converters.BoolConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -20,8 +23,10 @@ public class BasicEvaluation extends Evaluation implements Serializable {
     public BasicEvaluation() {
     }
 
-    public BasicEvaluation(Integer id, LocalDate visitDate, Restaurant restaurant, boolean likeRestaurant,
-                           String ipAddress) {
+    public BasicEvaluation(
+            Integer id, LocalDate visitDate, Restaurant restaurant, boolean likeRestaurant,
+            String ipAddress
+    ) {
         super(id, visitDate, restaurant);
         this.likeRestaurant = likeRestaurant;
         this.ipAddress = ipAddress;

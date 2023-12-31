@@ -13,4 +13,5 @@ public class BoolConverter implements AttributeConverter<Boolean, Character> {
     public Boolean convertToEntityAttribute(Character dbData) {
         return dbData.equals('T');
     }
+
 }

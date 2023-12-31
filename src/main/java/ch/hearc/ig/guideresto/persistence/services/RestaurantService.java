@@ -19,7 +19,8 @@ public class RestaurantService extends Service {
 
     public Set<Restaurant> getAll() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Restaurant> query = em.createQuery("SELECT r FROM Restaurant r", Restaurant.class);
+        TypedQuery<Restaurant> query = em.createQuery(
+                "SELECT r FROM Restaurant r", Restaurant.class);
         return query.getResultStream().collect(Collectors.toSet());
     }
 
@@ -42,8 +43,9 @@ public class RestaurantService extends Service {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em
                 // Fetch type eagerly (`FETCH` keyword)
-                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.type t WHERE t = :type", Restaurant.class)
-                .setParameter("type", chosenType);
+                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.type t WHERE t = :type",
+                             Restaurant.class
+                ).setParameter("type", chosenType);
         return query.getResultStream().collect(Collectors.toSet());
     }
 
@@ -58,8 +60,10 @@ public class RestaurantService extends Service {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em
                 // Fetch city eagerly (`FETCH` keyword)
-                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.address.city c WHERE c.cityName like :name", Restaurant.class)
-                .setParameter("name", "%" + needle + "%");
+                .createQuery(
+                        "SELECT r FROM Restaurant r JOIN FETCH r.address.city c WHERE c.cityName like :name",
+                        Restaurant.class
+                ).setParameter("name", "%" + needle + "%");
         return query.getResultStream().collect(Collectors.toSet());
     }
 
@@ -78,4 +82,5 @@ public class RestaurantService extends Service {
         em.merge(restaurant);
         em.getTransaction().commit();
     }
+
 }

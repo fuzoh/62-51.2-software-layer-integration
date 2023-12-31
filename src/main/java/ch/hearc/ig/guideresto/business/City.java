@@ -24,7 +24,10 @@ public class City implements Serializable {
     @Column(name = "NOM_VILLE")
     private String cityName;
 
-    @OneToMany(mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private Set<Restaurant> restaurants;
 
     public City(Integer id, String zipCode, String cityName) {
@@ -67,8 +70,8 @@ public class City implements Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o)
+                .getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
                 .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
@@ -78,13 +81,14 @@ public class City implements Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                                                       .getPersistentClass()
-                                                                       .hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass()
+                .hashCode() : getClass().hashCode();
     }
 
     @Override
     public String toString() {
         return "City{" + "id=" + id + ", zipCode='" + zipCode + '\'' + ", cityName='" + cityName + '\'' + ", restaurants=" + restaurants + '}';
     }
+
 }

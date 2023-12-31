@@ -1,6 +1,5 @@
 package ch.hearc.ig.guideresto.persistence.services;
 
-import ch.hearc.ig.guideresto.business.City;
 import ch.hearc.ig.guideresto.business.EvaluationCriteria;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -17,7 +16,9 @@ public class EvaluationCriteriaService extends Service {
 
     public Set<EvaluationCriteria> getAll() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<EvaluationCriteria> query = em.createQuery("SELECT e FROM EvaluationCriteria e", EvaluationCriteria.class);
+        TypedQuery<EvaluationCriteria> query = em.createQuery(
+                "SELECT e FROM EvaluationCriteria e", EvaluationCriteria.class);
         return query.getResultStream().collect(Collectors.toSet());
     }
+
 }

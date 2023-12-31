@@ -1,6 +1,5 @@
 package ch.hearc.ig.guideresto.persistence.services;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 public abstract class Service {

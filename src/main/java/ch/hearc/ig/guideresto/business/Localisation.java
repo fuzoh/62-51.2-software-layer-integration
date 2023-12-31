@@ -22,6 +22,7 @@ public class Localisation implements Serializable {
 
     public Localisation() {
     }
+
     public Localisation(String street, City city) {
         this.street = street;
         this.city = city;
@@ -53,12 +54,14 @@ public class Localisation implements Serializable {
                 .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
         Localisation that = (Localisation) o;
-        return getStreet() != null && Objects.equals(getStreet(), that.getStreet())
-                && getCity() != null && Objects.equals(getCity(), that.getCity());
+        return getStreet() != null && Objects.equals(
+                getStreet(), that.getStreet()) && getCity() != null && Objects.equals(
+                getCity(), that.getCity());
     }
 
     @Override
     public final int hashCode() {
         return Objects.hash(street, city);
     }
+
 }

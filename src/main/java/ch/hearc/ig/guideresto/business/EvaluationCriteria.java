@@ -14,8 +14,7 @@ public class EvaluationCriteria implements Serializable {
     @Column(name = "NUMERO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CRITERES_EVALUATION")
     @SequenceGenerator(
-            name = "SEQ_CRITERES_EVALUATION",
-            sequenceName = "SEQ_CRITERES_EVALUATION",
+            name = "SEQ_CRITERES_EVALUATION", sequenceName = "SEQ_CRITERES_EVALUATION",
             allocationSize = 1
     )
     private Integer id;
@@ -39,8 +38,8 @@ public class EvaluationCriteria implements Serializable {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                                                                     .getPersistentClass() : o.getClass();
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o)
+                .getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this)
                 .getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
@@ -50,9 +49,9 @@ public class EvaluationCriteria implements Serializable {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                                                       .getPersistentClass()
-                                                                       .hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy ? ((HibernateProxy) this)
+                .getHibernateLazyInitializer().getPersistentClass()
+                .hashCode() : getClass().hashCode();
     }
 
     public Integer getId() {
@@ -66,4 +65,5 @@ public class EvaluationCriteria implements Serializable {
     public String getDescription() {
         return description;
     }
+
 }

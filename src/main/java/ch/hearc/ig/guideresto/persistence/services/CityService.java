@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,4 +28,5 @@ public class CityService extends Service {
             return query.getResultStream().collect(Collectors.toSet());
         }
     }
+
 }
