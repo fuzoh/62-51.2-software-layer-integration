@@ -41,7 +41,8 @@ public class RestaurantService extends Service {
     public Set<Restaurant> getByType(RestaurantType chosenType) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em
-                .createQuery("SELECT r FROM Restaurant r JOIN r.type t WHERE t = :type", Restaurant.class)
+                // Fetch type eagerly (`FETCH` keyword)
+                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.type t WHERE t = :type", Restaurant.class)
                 .setParameter("type", chosenType);
         return query.getResultStream().collect(Collectors.toSet());
     }
@@ -56,7 +57,8 @@ public class RestaurantService extends Service {
     public Set<Restaurant> searchByCityName(String needle) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em
-                .createQuery("SELECT r FROM Restaurant r JOIN r.address.city c WHERE c.cityName like :name", Restaurant.class)
+                // Fetch city eagerly (`FETCH` keyword)
+                .createQuery("SELECT r FROM Restaurant r JOIN FETCH r.address.city c WHERE c.cityName like :name", Restaurant.class)
                 .setParameter("name", "%" + needle + "%");
         return query.getResultStream().collect(Collectors.toSet());
     }
