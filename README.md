@@ -17,6 +17,9 @@ configuration. Adjust the following properties:
 Currently, the project is configured with my personal access, this should work without changes if you are on HE-ARC
 network.
 
+You can use the `GuideResto_CREATE_TABLES.sql` and `GuideResto_INSERT_DATA.sql` files to create the database and insert
+some data.
+
 ## Versions
 
 The tag `v2.x.x` of the repository contains the code for the "Project 2" of the course "62-51.2 - Intégration de couches
