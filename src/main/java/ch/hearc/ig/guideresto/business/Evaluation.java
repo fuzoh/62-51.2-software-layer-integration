@@ -23,8 +23,8 @@ public abstract class Evaluation implements Serializable {
     @Column(name = "DATE_EVAL")
     private LocalDate visitDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JoinColumn(name = "FK_REST")
     private Restaurant restaurant;
 
@@ -33,6 +33,11 @@ public abstract class Evaluation implements Serializable {
 
     public Evaluation(Integer id, LocalDate visitDate, Restaurant restaurant) {
         this.id = id;
+        this.visitDate = visitDate;
+        this.restaurant = restaurant;
+    }
+
+    public Evaluation(LocalDate visitDate, Restaurant restaurant) {
         this.visitDate = visitDate;
         this.restaurant = restaurant;
     }

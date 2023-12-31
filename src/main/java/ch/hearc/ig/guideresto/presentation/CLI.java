@@ -326,7 +326,7 @@ public class CLI {
 
     private void addBasicEvaluation(Restaurant restaurant, Boolean like) {
         BasicEvaluation eval = new BasicEvaluation(
-                null, LocalDate.now(), restaurant, like, getIpAddress());
+                LocalDate.now(), restaurant, like, getIpAddress());
         restaurant.getBasicEvaluation().add(eval);
         restaurantService.update(restaurant);
         println("Votre vote a été pris en compte !");

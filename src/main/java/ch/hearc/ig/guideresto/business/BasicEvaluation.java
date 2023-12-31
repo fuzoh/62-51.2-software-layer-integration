@@ -32,6 +32,14 @@ public class BasicEvaluation extends Evaluation implements Serializable {
         this.ipAddress = ipAddress;
     }
 
+    public BasicEvaluation(
+            LocalDate visitDate, Restaurant restaurant, boolean likeRestaurant, String ipAddress
+    ) {
+        super(visitDate, restaurant);
+        this.likeRestaurant = likeRestaurant;
+        this.ipAddress = ipAddress;
+    }
+
     public void setLikeRestaurant(Boolean likeRestaurant) {
         this.likeRestaurant = likeRestaurant;
     }

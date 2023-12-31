@@ -35,16 +35,16 @@ public class Restaurant implements Serializable {
     private Localisation address;
 
     // I choose to load the type Eagerly, as it is displayed by CLI nearly systematically
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "FK_TYPE", nullable = false)
     private RestaurantType type;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<CompleteEvaluation> completeEvaluation = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.MERGE)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<BasicEvaluation> basicEvaluation = new LinkedHashSet<>();
 

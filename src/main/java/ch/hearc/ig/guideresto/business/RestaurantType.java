@@ -1,6 +1,8 @@
 package ch.hearc.ig.guideresto.business;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -27,7 +29,8 @@ public class RestaurantType implements Serializable {
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", cascade = CascadeType.MERGE)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     private Set<Restaurant> restaurants = new LinkedHashSet<>();
 
     public RestaurantType() {

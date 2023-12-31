@@ -1,6 +1,8 @@
 package ch.hearc.ig.guideresto.business;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
@@ -25,9 +27,10 @@ public class City implements Serializable {
     private String cityName;
 
     @OneToMany(
-            mappedBy = "address.city", cascade = CascadeType.REMOVE, orphanRemoval = true,
+            mappedBy = "address.city", cascade = CascadeType.MERGE, orphanRemoval = true,
             fetch = FetchType.LAZY
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Restaurant> restaurants;
 
     public City(Integer id, String zipCode, String cityName) {

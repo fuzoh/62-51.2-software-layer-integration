@@ -20,7 +20,10 @@ public class RestaurantService extends Service {
     public Set<Restaurant> getAll() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Restaurant> query = em.createQuery(
-                "SELECT r FROM Restaurant r", Restaurant.class);
+                // Directly load type and city eagerly, these data will be needed in most cases
+                "SELECT r FROM Restaurant r JOIN FETCH r.type t JOIN FETCH r.address.city c",
+                Restaurant.class
+        );
         return query.getResultStream().collect(Collectors.toSet());
     }
 

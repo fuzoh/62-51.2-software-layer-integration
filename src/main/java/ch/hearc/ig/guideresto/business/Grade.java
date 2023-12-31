@@ -23,13 +23,14 @@ public class Grade implements Serializable {
     @Column(name = "NOTE", nullable = false)
     private Integer grade;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JoinColumn(name = "FK_CRIT", nullable = false)
     private EvaluationCriteria criteria;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "FK_COMM")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private CompleteEvaluation evaluation;
 
     public Grade() {

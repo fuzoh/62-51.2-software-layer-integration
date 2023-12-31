@@ -23,7 +23,7 @@ public class CompleteEvaluation extends Evaluation implements Serializable {
     @Column(name = "NOM_UTILISATEUR", nullable = false, length = 100)
     private String username;
 
-    @OneToMany(mappedBy = "evaluation")
+    @OneToMany(mappedBy = "evaluation", cascade = CascadeType.MERGE)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Grade> grades = new LinkedHashSet<>();
 
